@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import emu.lunarcore.data.config.FloorInfo;
+import emu.lunarcore.data.config.MainMissionInfo;
 import emu.lunarcore.data.excel.*;
 import emu.lunarcore.game.battle.MazeBuff;
 import emu.lunarcore.util.Utils;
@@ -81,6 +82,10 @@ public class GameData {
     private static Int2ObjectMap<RelicMainAffixExcel> relicMainAffixExcelMap = new Int2ObjectOpenHashMap<>();
     private static Int2ObjectMap<RelicSubAffixExcel> relicSubAffixExcelMap = new Int2ObjectOpenHashMap<>();
     private static Int2ObjectMap<RelicSetExcel> relicSetExcelMap = new Int2ObjectOpenHashMap<>();
+
+    // Mission - Related
+    @Getter private static Int2ObjectMap<MainMissionExcel> mainMissionExcelMap = new Int2ObjectOpenHashMap<>();
+    @Getter private static Object2ObjectMap<Integer, MainMissionInfo> missionInfos = new Object2ObjectOpenHashMap<>();
     
     // Configs (Bin)
     @Getter private static Object2ObjectMap<String, FloorInfo> floorInfos = new Object2ObjectOpenHashMap<>();
@@ -209,5 +214,27 @@ public class GameData {
     
     public static RogueBuffExcel getRogueBuffExcel(int rogueBuffId, int level) {
         return rogueBuffExcelMap.get((rogueBuffId << 4) + level);
+    }
+    
+    public static MainMissionInfo getMainMissionInfos(int mainMissionID) {
+        if (!missionInfos.containsKey(mainMissionID)) {
+            return null;
+        }
+        return missionInfos.get(mainMissionID);
+    }
+
+    public static List<Integer> getMainMissionIds() {
+        List<Integer> allIds = new ArrayList<>();
+
+        for (Int2ObjectMap.Entry<MainMissionExcel> entry : mainMissionExcelMap.int2ObjectEntrySet()) {
+            MainMissionExcel mainMissionExcel = entry.getValue();
+            allIds.add(mainMissionExcel.getId());
+        }
+
+        return allIds;
+    }
+
+    public static MainMissionExcel getMainMissionExcelByID(int mMisionId) {
+        return mainMissionExcelMap.get(mMisionId);
     }
 }

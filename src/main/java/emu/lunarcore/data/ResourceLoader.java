@@ -53,6 +53,8 @@ public class ResourceLoader {
         loadActivityScheduleConfig();
         // Load rogue dialogue events
         loadRogueDialogueEvent();
+        // Load main mission configs
+        loadMissionInfo();
         
         // Done
         loaded = true;
@@ -388,5 +390,21 @@ public class ResourceLoader {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static void loadMissionInfo() {
+        int count = 0;
+        for (Integer mMissionId : GameData.getMainMissionIds()) {
+            var file = new File(LunarCore.getConfig().getResourceDir() + "/Config/Level/Mission/" + mMissionId + "/" + "MissionInfo_" + mMissionId + ".json");
+            if (!file.exists()) continue; 
+            try (var reader = new FileReader(file)) {
+                var info = gson.fromJson(reader, MainMissionInfo.class);
+                GameData.getMissionInfos().put(info.getMainMissionID(), info);
+                count++;
+            } catch (Exception e) {
+                LunarCore.getLogger().warn("Failed to load mission info: " + file.getName(), e);
+            }
+        }
+        LunarCore.getLogger().info("Loaded " + count + " mission infos.");
     }
 }

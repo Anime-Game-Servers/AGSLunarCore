@@ -6,6 +6,9 @@ import emu.lunarcore.game.avatar.GameAvatar;
 import emu.lunarcore.game.avatar.AvatarHeroPath;
 import emu.lunarcore.game.inventory.GameItem;
 import emu.lunarcore.game.player.Player;
+import emu.lunarcore.proto.MissionSyncOuterClass.MissionSync;
+import emu.lunarcore.proto.MissionOuterClass.Mission;
+import emu.lunarcore.proto.MissionStatusOuterClass.MissionStatus;
 import emu.lunarcore.proto.BoardDataSyncOuterClass.BoardDataSync;
 import emu.lunarcore.proto.PlayerSyncScNotifyOuterClass.PlayerSyncScNotify;
 import emu.lunarcore.server.packet.BasePacket;
@@ -131,6 +134,43 @@ public class PacketPlayerSyncScNotify extends BasePacket {
 
         var data = PlayerSyncScNotify.newInstance()
                 .addBasicTypeInfoList(heroPath.toProto());
+
+        this.setData(data);
+    }
+
+    public PacketPlayerSyncScNotify(int mainMissionId, int subMissionId, MissionStatus missionStatus) {
+        this();
+
+        var missionList = Mission.newInstance()
+            .setId(subMissionId)
+            .setStatus(missionStatus);
+
+        var missionSync = MissionSync.newInstance()
+            .addMissionList(missionList)
+            .addMainMissionId(mainMissionId);
+
+        var data = PlayerSyncScNotify.newInstance()
+            .setMissionSync(missionSync);
+
+        this.setData(data);
+    }
+
+
+    public PacketPlayerSyncScNotify(int mainMissionId, int[] subMissionIds, MissionStatus missionStatus) {
+        this();
+
+        var missionSync = MissionSync.newInstance();
+
+        for (int subMissionId : subMissionIds) {
+            missionSync.addMissionList(
+                Mission.newInstance()
+                    .setId(subMissionId)
+                    .setStatus(missionStatus)
+            );
+        }
+
+        var data = PlayerSyncScNotify.newInstance()
+            .setMissionSync(missionSync);
 
         this.setData(data);
     }

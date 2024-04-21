@@ -95,6 +95,9 @@ public class Player implements Tickable {
     private int stamina;
     private double staminaReserve;
     private long nextStaminaRecover;
+    
+    @Getter private int mainMissionId;
+    @Getter private int subMissionId;
 
     private transient Battle battle;
     private transient Scene scene;
@@ -976,5 +979,13 @@ public class Player implements Tickable {
         }
         
         return proto;
+    }
+
+    public void setMainMissionId(int mainMissionId) {
+        this.mainMissionId = mainMissionId;
+    }
+
+    public void setSubMissionId(int subMissionId) {
+        this.subMissionId = subMissionId;
     }
 }
