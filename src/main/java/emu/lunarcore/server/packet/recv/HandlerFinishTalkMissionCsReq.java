@@ -14,7 +14,7 @@ public class HandlerFinishTalkMissionCsReq extends PacketHandler {
     public void handle(GameSession session, byte[] data) throws Exception {
         var req = FinishTalkMissionCsReq.parseFrom(data);
 
-        session.send(new PacketFinishTalkMissionScRsp(req));
+        session.send(new PacketFinishTalkMissionScRsp(req, session.getPlayer()));
     }
 
 }

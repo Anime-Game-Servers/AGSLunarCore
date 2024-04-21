@@ -22,6 +22,7 @@ import emu.lunarcore.proto.BattleStatisticsOuterClass.BattleStatistics;
 import emu.lunarcore.server.game.BaseGameService;
 import emu.lunarcore.server.game.GameServer;
 import emu.lunarcore.server.packet.send.*;
+import emu.lunarcore.LunarCore;
 import it.unimi.dsi.fastutil.ints.IntSet;
 
 public class BattleService extends BaseGameService {
@@ -179,8 +180,14 @@ public class BattleService extends BaseGameService {
         // Get stage
         StageExcel stage = GameData.getStageExcelMap().get(stageId);
         if (stage == null) {
-            player.sendPacket(new PacketSceneCastSkillScRsp());
-            return;
+            // Check if its in PlaneEvent excel
+            if (GameData.getPlaneEventExcel(stageId, player.getWorldLevel()) != null) {
+                int newStageId = GameData.getPlaneEventExcel(stageId, player.getWorldLevel()).getStageId();
+                stage = GameData.getStageExcelMap().get(newStageId);
+            } else {
+                player.sendPacket(new PacketSceneCastSkillScRsp());
+                return;
+            }
         }
         
         // Create new battle for player

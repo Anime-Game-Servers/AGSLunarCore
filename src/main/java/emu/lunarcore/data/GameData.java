@@ -71,6 +71,7 @@ public class GameData {
     private static Int2ObjectMap<EquipmentPromotionExcel> equipmentPromotionExcelMap = new Int2ObjectOpenHashMap<>();
     private static Int2ObjectMap<MazeBuffExcel> mazeBuffExcelMap = new Int2ObjectOpenHashMap<>();
     private static Int2ObjectMap<CocoonExcel> cocoonExcelMap = new Int2ObjectOpenHashMap<>();
+    private static Int2ObjectMap<PlaneEventExcel> planeEventExcelMap = new Int2ObjectOpenHashMap<>();
     private static Int2ObjectMap<MappingInfoExcel> mappingInfoExcelMap = new Int2ObjectOpenHashMap<>();
     private static Int2ObjectMap<MonsterDropExcel> monsterDropExcelMap = new Int2ObjectOpenHashMap<>();
     
@@ -198,6 +199,10 @@ public class GameData {
     
     public static CocoonExcel getCocoonExcel(int cocoonId, int worldLevel) {
         return cocoonExcelMap.get((cocoonId << 8) + worldLevel);
+    }
+
+    public static PlaneEventExcel getPlaneEventExcel(int eventId, int worldLevel) {
+        return planeEventExcelMap.get((eventId << 8) + worldLevel);
     }
     
     public static MappingInfoExcel getMappingInfoExcel(int mappingInfoId, int worldLevel) {

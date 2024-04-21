@@ -25,6 +25,9 @@ public class MainMissionInfo {
 
         @SerializedName("MainMissionID")
         private int mainMissionID;
+
+        @SerializedName("TakeParamIntList")
+        private Integer[] takeParamIntList;
     }
 
 
